@@ -1,5 +1,10 @@
 package com.isima.creationannotation.myejbs;
 
+/**
+ * Interface d'EJB n'ayant pas d'implémentation possible
+ * @author alexandre.denis
+ *
+ */
 public interface IEJBWithoutImpl {
-	void execSQL();
+	int execSQL();
 }

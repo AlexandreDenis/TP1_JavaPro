@@ -2,17 +2,31 @@ package com.isima.creationannotation.container;
 
 import java.util.Stack;
 
+/**
+ * TransactionManager
+ * Gestionnaire de transactions utilisé par les proxys
+ * @author alexandre.denis
+ *
+ */
 public class TransactionManager {
 	
 	// singleton
 	private static TransactionManager INSTANCE = new TransactionManager();
 	
+	// pile de transactions
 	private Stack<Transaction> _transactions;
 	
+	/**
+	 * Constructeur privé
+	 */
 	private TransactionManager(){
-		_transactions = new Stack<Transaction>();	// initialisation de la pile de transaction
+		_transactions = new Stack<Transaction>();	// initialisation de la pile de transactions
 	}
 	
+	/**
+	 * Obtention de l'instance unique de TransactionManager
+	 * @return singleton du TransactionManager
+	 */
 	public static TransactionManager getInstance(){
 		return INSTANCE;
 	}
