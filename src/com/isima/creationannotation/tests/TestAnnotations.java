@@ -150,4 +150,13 @@ public class TestAnnotations {
 		assertEquals(EJBContainer.create(IEJBWithTransacRequired.class)
 				.callMethodOfEJBTransacRequiresNew(), 2);
 	}
+	
+	/**
+	 * Test que l'EntityManager est bien injecté suite à une annotation 
+	 * @PersistenceContext
+	 */
+	@Test
+	public void testEntityManagerNotNull(){
+		
+	}
 }

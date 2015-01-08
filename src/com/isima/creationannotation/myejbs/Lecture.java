@@ -1,5 +1,6 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
 
 /**
@@ -11,6 +12,9 @@ import com.isima.creationannotation.annotations.Stateless;
 @Stateless
 public class Lecture implements ILecture{
 	private int _integer;
+	
+	@PersistenceContext
+	//EntityManager em;
 	
 	/**
 	 * Constructeur par défaut
