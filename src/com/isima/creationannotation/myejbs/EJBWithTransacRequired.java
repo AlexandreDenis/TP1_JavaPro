@@ -4,24 +4,30 @@ import com.isima.creationannotation.annotations.TransactionAttribute;
 import com.isima.creationannotation.annotations.TransactionAttributeType;
 import com.isima.creationannotation.container.EJBContainer;
 import com.isima.creationannotation.container.Transaction;
+import com.isima.creationannotation.container.TransactionManager;
 
 @TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	@Override
 	public int execSQL() {
-		// TransactionManager.begin();
-		return -1;
+		// Implicite : TransactionManager.begin(); -> par le proxy
+		
+		// DO SOMETHING
+		
+		return TransactionManager.getInstance().getNbTransactions();
 	}
 	
 	@Override
 	public int useMethodWhichNeedsTransaction(){
-		// TransactionManager.begin();
+		// Implicite : TransactionManager.begin(); -> par le proxy
+		
 		return execSQL();
 	}
 	
 	@Override
 	public int callMethodOfEJBTransacRequiresNew(){
-		// TransactionManager.begin()
+		// Implicite : TransactionManager.begin(); -> par le proxy
+		
 		return EJBContainer.create(IEJBWithTransacRequiresNew.class)
 				.execSQL();
 	}

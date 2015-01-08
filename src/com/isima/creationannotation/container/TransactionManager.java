@@ -23,7 +23,14 @@ public class TransactionManager {
 	 * Voir le TransactionAttribute de l'EJB nécessitant une transaction.
 	 */
 	public void begin(){
-
+		/* if(Required){
+		 * 		if(_transactions.size() <= 0){
+		 * 			_transactions.push(new Transaction());
+		 * 		}
+		 * } else {
+		 * 		_transactions.push(new Transaction());
+		 * }
+		 */
 	}
 	
 	public void commit(){
@@ -49,7 +56,7 @@ public class TransactionManager {
 	 */
 	public void end(){
 		if(_transactions != null && _transactions.size() > 0){
-			_transactions.pop();	//
+			_transactions.pop();	// on supprime la transaction courante de la pile
 		}
 	}
 	

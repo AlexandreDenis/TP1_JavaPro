@@ -1,5 +1,8 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.Stateless;
+
+@Stateless
 public class Lecture implements ILecture{
 	private int _integer;
 	
