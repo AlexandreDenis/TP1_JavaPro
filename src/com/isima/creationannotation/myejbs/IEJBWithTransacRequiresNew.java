@@ -1,5 +1,7 @@
 package com.isima.creationannotation.myejbs;
 
 public interface IEJBWithTransacRequiresNew {
-	void execSQL();
+	int execSQL();
+	int useMethodWhichNeedsTransaction();
+	int callMethodOfEJBTransacRequired();
 }
