@@ -2,6 +2,7 @@ package com.isima.creationannotation.myejbs;
 
 import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
+import com.isima.creationannotation.container.EntityManager;
 
 /**
  * Classe d'EJB simple
@@ -14,7 +15,7 @@ public class Lecture implements ILecture{
 	private int _integer;
 	
 	@PersistenceContext
-	//EntityManager em;
+	EntityManager em;
 	
 	/**
 	 * Constructeur par défaut
@@ -42,5 +43,9 @@ public class Lecture implements ILecture{
 	 */
 	public int getInteger(){
 		return _integer;
+	}
+	
+	public EntityManager getEntityManager(){
+		return em;
 	}
 }

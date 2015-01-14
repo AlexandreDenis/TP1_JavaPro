@@ -5,6 +5,7 @@ import com.isima.creationannotation.annotations.TransactionAttributeType;
 import com.isima.creationannotation.container.EJBContainer;
 import com.isima.creationannotation.container.Transaction;
 import com.isima.creationannotation.container.TransactionManager;
+import com.isima.creationannotation.exceptions.FullPoolEJBException;
 
 /**
  * Classe d'EJB
@@ -42,12 +43,17 @@ public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	 * Méthode faisant appel à une autre méthode d'un autre EJB
 	 * dont le TransactionAttribute est REQUIRES_NEW
 	 * @return le nombre de transactions ouvertes
+	 * @throws FullPoolEJBException 
 	 */
 	@Override
-	public int callMethodOfEJBTransacRequiresNew(){
+	public int callMethodOfEJBTransacRequiresNew() throws FullPoolEJBException{
 		// Implicite : TransactionManager.begin(); -> par le proxy
+		IEJBWithTransacRequiresNew ejb = EJBContainer.getInstance().create(IEJBWithTransacRequiresNew.class);
+		int nbTransac = ejb.execSQL();
 		
-		return EJBContainer.create(IEJBWithTransacRequiresNew.class)
-				.execSQL();
+		EJBContainer.getInstance().release(IEJBWithTransacRequiresNew.class,
+				ejb);
+		
+		return nbTransac;
 	}
 }

@@ -1,5 +1,7 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.exceptions.FullPoolEJBException;
+
 /**
  * Interface d'EJB qui a un TransactionAttribute REQUIRED
  * @author alexandre.denis
@@ -8,5 +10,5 @@ package com.isima.creationannotation.myejbs;
 public interface IEJBWithTransacRequired {
 	int execSQL();
 	int useMethodWhichNeedsTransaction();
-	int callMethodOfEJBTransacRequiresNew();
+	int callMethodOfEJBTransacRequiresNew() throws FullPoolEJBException;
 }
