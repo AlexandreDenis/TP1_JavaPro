@@ -1,6 +1,8 @@
 package com.isima.creationannotation.myejbs;
 
-import com.isima.creationannotation.exceptions.FullPoolEJBException;
+import com.isima.creationannotation.exceptions.AmbiguousEJBException;
+import com.isima.creationannotation.exceptions.EmptyPoolEJBException;
+import com.isima.creationannotation.exceptions.NoImplementationEJBException;
 
 /**
  * Interface d'EJB qui a un TransactionAttribute REQUIRED
@@ -10,5 +12,5 @@ import com.isima.creationannotation.exceptions.FullPoolEJBException;
 public interface IEJBWithTransacRequired {
 	int execSQL();
 	int useMethodWhichNeedsTransaction();
-	int callMethodOfEJBTransacRequiresNew() throws FullPoolEJBException;
+	int callMethodOfEJBTransacRequiresNew() throws EmptyPoolEJBException, NoImplementationEJBException, AmbiguousEJBException;
 }

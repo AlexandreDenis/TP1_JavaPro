@@ -1,5 +1,6 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.Stateless;
 import com.isima.creationannotation.container.TransactionManager;
 
 /**
@@ -8,6 +9,7 @@ import com.isima.creationannotation.container.TransactionManager;
  * @author alexandre.denis
  *
  */
+@Stateless
 public class EJBWithMultImpl1 implements IEJBWithMultImpl {
 	
 	/**

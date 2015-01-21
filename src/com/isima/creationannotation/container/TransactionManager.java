@@ -32,23 +32,20 @@ public class TransactionManager {
 	}
 	
 	/**
-	 * Démarre une nouvelle transaction on réutilise celle courante.
-	 * Cela dépend de la stratégie utilisée.
-	 * Voir le TransactionAttribute de l'EJB nécessitant une transaction.
+	 * Démarre une nouvelle transaction ou réutilise celle courante
+	 * si il n'y en a pas en court.
 	 */
 	public void begin(){
-		/* if(Required){
-		 * 		if(_transactions.size() <= 0){
-		 * 			_transactions.push(new Transaction());
-		 * 		}
-		 * } else {
-		 * 		_transactions.push(new Transaction());
-		 * }
-		 */
+		if(_transactions.size() < 1){
+			_transactions.push(new Transaction());
+		}
 	}
 	
-	public void commit(){
-		
+	/**
+	 * Démarre une nouvelle transaction.
+	 */
+	public void beginNewTransaction(){
+		_transactions.push(new Transaction());
 	}
 	
 	/**

@@ -1,11 +1,13 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.Stateless;
 import com.isima.creationannotation.annotations.TransactionAttribute;
 import com.isima.creationannotation.annotations.TransactionAttributeType;
 import com.isima.creationannotation.container.EJBContainer;
-import com.isima.creationannotation.container.Transaction;
 import com.isima.creationannotation.container.TransactionManager;
-import com.isima.creationannotation.exceptions.FullPoolEJBException;
+import com.isima.creationannotation.exceptions.AmbiguousEJBException;
+import com.isima.creationannotation.exceptions.EmptyPoolEJBException;
+import com.isima.creationannotation.exceptions.NoImplementationEJBException;
 
 /**
  * Classe d'EJB
@@ -13,12 +15,13 @@ import com.isima.creationannotation.exceptions.FullPoolEJBException;
  * @author alexandre.denis
  *
  */
-@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
+@Stateless
 public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	/**
 	 * Méthode simple exécutant une action de persistance
 	 * @return le nombre de transactions ouvertes
 	 */
+	@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 	@Override
 	public int execSQL() {
 		// Implicite : TransactionManager.begin(); -> par le proxy
@@ -32,6 +35,7 @@ public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	 * Méthode appelant une autre méthode de l'EJB
 	 * @return le nombre de transactions ouvertes
 	 */
+	@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 	@Override
 	public int useMethodWhichNeedsTransaction(){
 		// Implicite : TransactionManager.begin(); -> par le proxy
@@ -43,16 +47,16 @@ public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	 * Méthode faisant appel à une autre méthode d'un autre EJB
 	 * dont le TransactionAttribute est REQUIRES_NEW
 	 * @return le nombre de transactions ouvertes
-	 * @throws FullPoolEJBException 
+	 * @throws EmptyPoolEJBException 
+	 * @throws NoImplementationEJBException 
+	 * @throws AmbiguousEJBException 
 	 */
+	@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 	@Override
-	public int callMethodOfEJBTransacRequiresNew() throws FullPoolEJBException{
+	public int callMethodOfEJBTransacRequiresNew() throws EmptyPoolEJBException, NoImplementationEJBException, AmbiguousEJBException{
 		// Implicite : TransactionManager.begin(); -> par le proxy
 		IEJBWithTransacRequiresNew ejb = EJBContainer.getInstance().create(IEJBWithTransacRequiresNew.class);
 		int nbTransac = ejb.execSQL();
-		
-		EJBContainer.getInstance().release(IEJBWithTransacRequiresNew.class,
-				ejb);
 		
 		return nbTransac;
 	}
