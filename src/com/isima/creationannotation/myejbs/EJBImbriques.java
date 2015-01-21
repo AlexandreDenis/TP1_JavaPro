@@ -1,5 +1,6 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.EJB;
 import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
 import com.isima.creationannotation.container.EntityManager;
@@ -7,23 +8,25 @@ import com.isima.creationannotation.container.TransactionManager;
 
 /**
  * Classe d'EJB
- * 2ème classe implémentant l'interface IEJBWithMultImpl
- * @author alexandre.denis
+ * Implémentation d'un EJB en contenant un autre
+ * @author Alexandre
  *
  */
 @Stateless
-public class EJBWithMultImpl2 implements IEJBWithMultImpl {
+public class EJBImbriques implements IEJBImbriques{
+	@EJB
+	private ILecture l;
 	
 	@PersistenceContext
-	EntityManager em;
+	private EntityManager em;
 	
-	/**
-	 * Méthode simple exécutant une action de persistance
-	 * @return le nombre de transactions ouvertes
-	 */
-	public int execSQL(){
+	public ILecture getEJBImbrique(){
+		return l;
+	}
+	
+	@Override
+	public int execSQL() {
 		em.persist(new Object());
-		
 		return TransactionManager.getInstance().getNbTransactions();
 	}
 }

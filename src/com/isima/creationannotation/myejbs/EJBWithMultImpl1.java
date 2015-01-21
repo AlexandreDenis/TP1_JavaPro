@@ -1,6 +1,8 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
+import com.isima.creationannotation.container.EntityManager;
 import com.isima.creationannotation.container.TransactionManager;
 
 /**
@@ -12,14 +14,15 @@ import com.isima.creationannotation.container.TransactionManager;
 @Stateless
 public class EJBWithMultImpl1 implements IEJBWithMultImpl {
 	
+	@PersistenceContext
+	EntityManager em;
+	
 	/**
 	 * Méthode simple exécutant une action de persistance
 	 * @return le nombre de transactions ouvertes
 	 */
 	public int execSQL(){
-		// Implicite : TransactionManager.getInstance().begin(); -> par le proxy
-		
-		// DO SOMETHING
+		em.persist(new Object());
 		
 		return TransactionManager.getInstance().getNbTransactions();
 	}

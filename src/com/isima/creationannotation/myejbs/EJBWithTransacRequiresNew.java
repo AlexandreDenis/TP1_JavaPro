@@ -1,9 +1,11 @@
 package com.isima.creationannotation.myejbs;
 
+import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
 import com.isima.creationannotation.annotations.TransactionAttribute;
 import com.isima.creationannotation.annotations.TransactionAttributeType;
 import com.isima.creationannotation.container.EJBContainer;
+import com.isima.creationannotation.container.EntityManager;
 import com.isima.creationannotation.container.TransactionManager;
 import com.isima.creationannotation.exceptions.AmbiguousEJBException;
 import com.isima.creationannotation.exceptions.EmptyPoolEJBException;
@@ -17,6 +19,10 @@ import com.isima.creationannotation.exceptions.NoImplementationEJBException;
  */
 @Stateless
 public class EJBWithTransacRequiresNew implements IEJBWithTransacRequiresNew {
+	
+	@PersistenceContext
+	EntityManager em;
+	
 	/**
 	 * Méthode simple exécutant une action de persistance
 	 * @return le nombre de transactions ouvertes
@@ -24,6 +30,8 @@ public class EJBWithTransacRequiresNew implements IEJBWithTransacRequiresNew {
 	@TransactionAttribute(type=TransactionAttributeType.REQUIRES_NEW)
 	@Override
 	public int execSQL(){
+		em.persist(new Object());
+		
 		return TransactionManager.getInstance().getNbTransactions();
 	}
 	

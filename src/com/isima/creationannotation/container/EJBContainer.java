@@ -249,10 +249,10 @@ public class EJBContainer {
 									throws Throwable {
 								Object res = null;
 
+								// on récupère la méthode de la classe
+								// pour obtenir le TransactionAttribute
 								Method[] implMethods = class_implementation.getMethods();
-								
 								Method implMethod = null;
-								
 								for(Method met : implMethods){
 									if(met.getName() == method.getName()){
 										implMethod = met;
@@ -261,6 +261,9 @@ public class EJBContainer {
 								
 								// récupération d'un EJB du pool
 								T ejb = (T)InstanceManager.getEJBInstance(class_implementation);
+								
+								// gestion des EJB imbriqués
+								EJBContainer.getInstance().manage(ejb);
 								
 								// récupération d'une transaction
 								if(implMethod.isAnnotationPresent(TransactionAttribute.class)){
@@ -332,10 +335,10 @@ public class EJBContainer {
 										throws Throwable {
 									Object res = null;
 									
+									// on récupère la méthode de la classe
+									// pour obtenir le TransactionAttribute
 									Method[] implMethods = class_implementation.getMethods();
-									
 									Method implMethod = null;
-									
 									for(Method met : implMethods){
 										if(met.getName() == method.getName()){
 											implMethod = met;
@@ -344,6 +347,9 @@ public class EJBContainer {
 									
 									// récupération d'un EJB du pool
 									Object ejb = InstanceManager.getEJBInstance(class_implementation);
+									
+									// gestion des EJB imbriqués
+									EJBContainer.getInstance().manage(ejb);
 									
 									// récupération d'une transaction
 									if(implMethod.isAnnotationPresent(TransactionAttribute.class)){

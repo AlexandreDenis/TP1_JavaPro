@@ -8,20 +8,18 @@ import java.lang.reflect.Proxy;
 
 import org.junit.Test;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import com.isima.creationannotation.annotations.EJB;
 import com.isima.creationannotation.container.EJBContainer;
 import com.isima.creationannotation.container.InstanceManager;
 import com.isima.creationannotation.exceptions.AmbiguousEJBException;
 import com.isima.creationannotation.exceptions.EmptyPoolEJBException;
 import com.isima.creationannotation.exceptions.NoImplementationEJBException;
+import com.isima.creationannotation.myejbs.IEJBImbriques;
 import com.isima.creationannotation.myejbs.IEJBWithMultImpl;
 import com.isima.creationannotation.myejbs.IEJBWithTransacRequired;
 import com.isima.creationannotation.myejbs.IEJBWithTransacRequiresNew;
 import com.isima.creationannotation.myejbs.IEJBWithoutImpl;
 import com.isima.creationannotation.myejbs.ILecture;
-import com.isima.creationannotation.myejbs.Lecture;
 
 /**
  * Classe de test du TP
@@ -34,7 +32,7 @@ public class TestAnnotations {
 	private ILecture l = null;
 	
 	/**
-	 * Test que l'aspect sans état de l'EJB Stateless est bien respecté
+	 * Teste que l'aspect sans état de l'EJB Stateless est bien respecté
 	 * @throws AmbiguousEJBException 
 	 * @throws NoImplementationEJBException 
 	 * @throws IllegalAccessException 
@@ -97,7 +95,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test l'injection d'un EJB qui n'a pas d'implémentation
+	 * Teste l'injection d'un EJB qui n'a pas d'implémentation
 	 * @throws EmptyPoolEJBException 
 	 * @throws NoImplementationEJBException 
 	 * @throws AmbiguousEJBException 
@@ -108,7 +106,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test l'injection d'un EJB qui possède plusieurs implémentations
+	 * Teste l'injection d'un EJB qui possède plusieurs implémentations
 	 * possibles
 	 * @throws EmptyPoolEJBException 
 	 * @throws NoImplementationEJBException 
@@ -198,7 +196,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test que l'EntityManager est bien injecté suite à une annotation 
+	 * Teste que l'EntityManager est bien injecté suite à une annotation 
 	 * @throws EmptyPoolEJBException 
 	 * @throws NoImplementationEJBException 
 	 * @throws AmbiguousEJBException 
@@ -210,7 +208,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test que les traitements sont bien effectués après la construction d'un EJB quand il
+	 * Teste que les traitements sont bien effectués après la construction d'un EJB quand il
 	 * y a l'annotation @PostConstruct
 	 * @throws AmbiguousEJBException 
 	 * @throws NoImplementationEJBException 
@@ -222,7 +220,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test que les traitements sont bien effectués avant la destruction d'un EJB quand il y
+	 * Teste que les traitements sont bien effectués avant la destruction d'un EJB quand il y
 	 * a l'annotation @PreDestroy
 	 * @throws AmbiguousEJBException 
 	 * @throws NoImplementationEJBException 
@@ -240,7 +238,7 @@ public class TestAnnotations {
 	}
 	
 	/**
-	 * Test que l'exception FullPoolEJBException est bien lancée
+	 * Teste que l'exception FullPoolEJBException est bien lancée
 	 * lorsque l'on essaie de créer plus d'EJB que la pool 
 	 * n'en contient
 	 * @throws Exception 
@@ -255,5 +253,29 @@ public class TestAnnotations {
 			InstanceManager.resetPools(10);
 			throw e;
 		}
+	}
+	
+	/**
+	 * Teste que les EJBs imbriqués dans des EJBs sont bien injectés 
+	 * en même temps que leur EJB parent
+	 * @throws EmptyPoolEJBException
+	 * @throws NoImplementationEJBException
+	 * @throws AmbiguousEJBException
+	 */
+	@Test
+	public void testEJBImbriques() throws EmptyPoolEJBException, NoImplementationEJBException, AmbiguousEJBException {
+		assertNotNull(EJBContainer.getInstance().create(IEJBImbriques.class).getEJBImbrique());
+	}
+	
+	/**
+	 * Teste que les EJBs imbriqués dans des EJBs
+	 * sont bien des proxys
+	 * @throws EmptyPoolEJBException
+	 * @throws NoImplementationEJBException
+	 * @throws AmbiguousEJBException
+	 */
+	@Test
+	public void testEJBImbriquesIsProxy() throws EmptyPoolEJBException, NoImplementationEJBException, AmbiguousEJBException {
+		assertTrue(Proxy.isProxyClass(EJBContainer.getInstance().create(IEJBImbriques.class).getEJBImbrique().getClass()));
 	}
 }
