@@ -3,22 +3,29 @@ package com.isima.creationannotation.container;
 import static org.reflections.ReflectionUtils.getAllFields;
 import static org.reflections.ReflectionUtils.withAnnotation;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
+import org.reflections.Configuration;
 import org.reflections.Reflections;
+import org.reflections.adapters.MetadataAdapter;
+import org.reflections.scanners.Scanner;
+import org.reflections.serializers.Serializer;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
-import com.google.common.reflect.ClassPath;
 import com.isima.creationannotation.annotations.EJB;
 import com.isima.creationannotation.annotations.Stateless;
 import com.isima.creationannotation.annotations.TransactionAttribute;
@@ -37,6 +44,9 @@ public class EJBContainer {
 	// singleton
 	private static EJBContainer INSTANCE = null;
 	
+	// classe qui gère la réflexion
+	private static Reflections reflection = null;
+	
 	// mapping entre interface d'EJB et implémentations
 	private static HashMap<Class<?>, List<Class<?>>> _implementations = new HashMap<Class<?>, List<Class<?>>>();
 	
@@ -50,19 +60,48 @@ public class EJBContainer {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	public static EJBContainer createEJBContainer() throws InstantiationException, IllegalAccessException{
+	private static EJBContainer createEJBContainer() throws InstantiationException, IllegalAccessException{
+		return createEJBContainer(null);
+	}
+	
+	public static EJBContainer createEJBContainer(final ClassLoader cl) throws InstantiationException, IllegalAccessException{
 		// création de l'EJBContainer
 		INSTANCE = new EJBContainer();
+
+		if(cl != null){
+//			List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+//			classLoadersList.add(cl);
+			//classLoadersList.add(INSTANCE.getClass().getClassLoader());
+			//System.out.println(cl.toString());
+			
+			reflection = new Reflections();
+//			reflection = new Reflections(new ConfigurationBuilder()
+//				.setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+//			reflection = new Reflections(new ConfigurationBuilder()
+//				.addClassLoader(EJBContainer.class.getClassLoader())
+//				.addClassLoader(cl));
+		}
 		
 		// initialisation de l'EJBContainer
 		try {
 			initializePools();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return INSTANCE;
+	}
+	
+	/**
+	 * Retourne la classe gérant la réflection
+	 * @return classe gérant la réflection
+	 */
+	private static Reflections getReflections(){
+		if(reflection == null){
+			reflection = new Reflections();
+		}
+		
+		return reflection;
 	}
 	
 	/**
@@ -158,8 +197,8 @@ public class EJBContainer {
 	 */
 	private static List<Class> getClassesEJB() throws ClassNotFoundException {
 		ArrayList<Class> result = new ArrayList<Class>();
-		
-		Reflections refl = new Reflections();
+
+		Reflections refl = getReflections();
 		Set<Class<?>> set_classes = refl.getTypesAnnotatedWith(Stateless.class);
 		for (Class clazz : set_classes) {
 			if(!Modifier.isInterface(Class.forName(clazz.getName()).getModifiers())){

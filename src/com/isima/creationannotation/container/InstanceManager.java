@@ -72,7 +72,7 @@ public class InstanceManager {
 				boolean oldAccessibility = pc.isAccessible();
 				
 				pc.setAccessible(true);
-				pc.set(instance_to_return, new EntityManagerImpl());
+				pc.set(instance_to_return, EntityManagerImpl.getInstance());
 				pc.setAccessible(oldAccessibility);
 			}
 		} else {

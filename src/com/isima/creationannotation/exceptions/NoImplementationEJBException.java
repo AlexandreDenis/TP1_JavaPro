@@ -9,6 +9,8 @@ package com.isima.creationannotation.exceptions;
  */
 public class NoImplementationEJBException extends Exception {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Renvoie un message spécifique à l'exception
 	 */
