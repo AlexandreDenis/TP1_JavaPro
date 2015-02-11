@@ -23,7 +23,7 @@ public class InstanceManager {
 	private static HashMap<Class<?>, List<Object>> _pools = new HashMap<Class<?>, List<Object>>();
 	
 	// nombre d'EJB de base dans le pool d'une interface donnée
-	private static int sizePool = 1;
+	private static int sizePool = 10;
 	
 	/**
 	 * Constructeur privé
