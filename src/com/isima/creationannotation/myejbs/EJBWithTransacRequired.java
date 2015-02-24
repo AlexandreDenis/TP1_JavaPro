@@ -42,8 +42,6 @@ public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 	@Override
 	public int useMethodWhichNeedsTransaction(){
-		// Implicite : TransactionManager.begin(); -> par le proxy
-		
 		return execSQL();
 	}
 	
@@ -58,7 +56,6 @@ public class EJBWithTransacRequired implements IEJBWithTransacRequired{
 	@TransactionAttribute(type=TransactionAttributeType.REQUIRED)
 	@Override
 	public int callMethodOfEJBTransacRequiresNew() throws EmptyPoolEJBException, NoImplementationEJBException, AmbiguousEJBException{
-		// Implicite : TransactionManager.begin(); -> par le proxy
 		IEJBWithTransacRequiresNew ejb = EJBContainer.getInstance().create(IEJBWithTransacRequiresNew.class);
 		int nbTransac = ejb.execSQL();
 		

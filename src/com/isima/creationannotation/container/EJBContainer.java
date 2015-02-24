@@ -36,7 +36,6 @@ import com.isima.creationannotation.exceptions.NoImplementationEJBException;
 
 /**
  * Conteneur EJB
- * @author alexandre.denis
  *
  */
 public class EJBContainer {
@@ -60,27 +59,11 @@ public class EJBContainer {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	private static EJBContainer createEJBContainer() throws InstantiationException, IllegalAccessException{
-		return createEJBContainer(null);
-	}
-	
-	public static EJBContainer createEJBContainer(final ClassLoader cl) throws InstantiationException, IllegalAccessException{
+	public static EJBContainer createEJBContainer() throws InstantiationException, IllegalAccessException{
 		// création de l'EJBContainer
 		INSTANCE = new EJBContainer();
 
-		if(cl != null){
-//			List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-//			classLoadersList.add(cl);
-			//classLoadersList.add(INSTANCE.getClass().getClassLoader());
-			//System.out.println(cl.toString());
-			
-			reflection = new Reflections();
-//			reflection = new Reflections(new ConfigurationBuilder()
-//				.setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-//			reflection = new Reflections(new ConfigurationBuilder()
-//				.addClassLoader(EJBContainer.class.getClassLoader())
-//				.addClassLoader(cl));
-		}
+		reflection = new Reflections();
 		
 		// initialisation de l'EJBContainer
 		try {
@@ -118,16 +101,6 @@ public class EJBContainer {
 		// on vide la map
 		_implementations.clear();
 		
-		/*System.out.println("*****Classes*****");
-		for(Class aclass : classes){
-			System.out.println(aclass.getName());
-		}
-		
-		System.out.println("*****Interfaces*****");
-		for(Class aclass : interfaces){
-			System.out.println(aclass.getName());
-		}*/
-		
 		// on fait le mapping entre interface d'EJB et implémentations
 		for(Class anInterface : interfaces){
 			for(Class aClass : classes){
@@ -138,55 +111,7 @@ public class EJBContainer {
 					_implementations.get(anInterface).add(aClass);
 				}
 			}
-			
-			// si plusieurs implémentations, on supprime l'interface de la map des
-			// pools à initialiser
-			/*List<Class<?>> values = _implementations.get(anInterface);
-			if(values != null){
-				if(values.size() != 1){
-					_implementations.remove(anInterface);
-				}
-			}*/
 		}
-		
-		// on initialise les pools avec sizePool instances d'EJB
-		/*Set keys = _implementations.keySet();
-		Iterator<Class> it = keys.iterator();
-		while(it.hasNext()){
-			Class key = it.next();
-			Class impl = _implementations.get(key).get(0);
-
-			if(_implementations.get(key).size() == 1){
-				// création d'une pool
-				_pools.put(key, new ArrayList<Object>());
-				
-				for(int i = 0; i < sizePool; ++i){
-					_pools.get(key).add(Class.forName(impl.getName()).newInstance());
-				}
-			}
-		}*/
-		
-		/*Set keys2 = _pools.keySet();
-		Iterator<Class> it2 = keys2.iterator();
-		while(it2.hasNext()){
-			Class key2 = it2.next();
-			
-			System.out.println(key2.getName() + " = " +_pools.get(key2).size());
-		}*/
-		
-		/*Set keys = _implementations.keySet();
-		Iterator<Class> it = keys.iterator();
-		while(it.hasNext()){
-			Class key = it.next();
-			ArrayList<?> values = new ArrayList(_implementations.get(key));
-			String strValues = "";
-			for(Object aClass : values){
-				Class theClass = (Class)aClass;
-				strValues += theClass.getName() + " || ";
-			}
-			
-			System.out.println(key.getName() + " = " + values.size());
-		}*/
 	}
 	
 	/**
